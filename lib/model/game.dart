@@ -23,14 +23,15 @@ class GameModel {
 
   TeamModel mapTeam(Map<String, dynamic> json, String team) {
     ImageModel image = new ImageModel();
+    TeamModel teamData = TeamModel.fromJson(json[team]);
 
     return TeamModel(
-      id: json[team]['id'],
-      abbreviation: json[team]['abbreviation'],
-      city: json[team]['city'],
-      name: json[team]['name'],
-      nickname: json[team]['nickname'],
-      logo: image.getLogo(json[team]['abbreviation']),
+      id: teamData.id,
+      abbreviation: teamData.abbreviation,
+      city: teamData.city,
+      name: teamData.name,
+      nickname: teamData.nickname,
+      logo: image.getLogo(teamData.abbreviation),
     );
   }
 

@@ -38,10 +38,7 @@ class _GameState extends State<Game> {
                 print('object');
               }))
           .onError((error, stackTrace) {
-        setState(() {
-          error = error.toString();
-          loading = false;
-        });
+        setState(() => error = error.toString());
         print('object err' + error.toString());
       });
       setState(() => loading = false);
@@ -50,10 +47,7 @@ class _GameState extends State<Game> {
         setState(() => games = value);
         print('object 2');
       }).onError((error, stackTrace) {
-        setState(() {
-          error = error.toString();
-          loading = false;
-        });
+        setState(() => error = error.toString());
         print('object 2 err' + error.toString());
       });
       setState(() => loading = false);
