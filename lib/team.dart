@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:nba/model/image.dart';
 import 'package:nba/model/team.dart';
+import 'package:nba/teamDetail.dart';
 
 class Team extends StatefulWidget {
   Team({Key? key}) : super(key: key);
@@ -44,42 +45,49 @@ class _TeamState extends State<Team> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           child: Card(
                             color: Color(0xff6C63FF),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20),
-                                    child: CircleAvatar(
-                                      radius: 35,
-                                      backgroundImage: team.logo ??
-                                          AssetImage('assets/images/nba.jpg'),
+                            child: InkWell(
+                              onTap: () => {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        TeamDetail(team: team)))
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(right: 20),
+                                      child: CircleAvatar(
+                                        radius: 35,
+                                        backgroundImage: team.logo ??
+                                            AssetImage('assets/images/nba.jpg'),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: size.width * 0.6,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          team.name,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 30,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          team.abbreviation,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                    Container(
+                                      width: size.width * 0.6,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            team.name,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                color: Colors.white),
+                                          ),
+                                          Text(
+                                            team.abbreviation,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
