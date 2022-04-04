@@ -66,7 +66,7 @@ class _GameState extends State<Game> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
+                    margin: EdgeInsets.all(15),
                     width: size.width,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -103,83 +103,51 @@ class _GameState extends State<Game> {
                       ),
                     ),
                   ),
-                  Column(
-                    children: games.map((game) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        child: Card(
-                          color: Color(0xff6C63FF),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: CircleAvatar(
-                                          radius: 35,
-                                          backgroundImage: game.homeTeam!.logo,
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              game.homeTeam!.abbreviation,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              game.homeTeamScore.toString(),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: getScoreColors(
-                                                  "home",
-                                                  game.homeTeamScore ?? 0,
-                                                  game.visitorTeamScore ?? 0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Row(
+                  Container(
+                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                    child: Column(
+                      children: games.map((game) {
+                        return Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5),
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Color(0xff6C63FF),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Row(
                                   children: [
+                                    Container(
+                                      margin: EdgeInsets.only(right: 20),
+                                      child: CircleAvatar(
+                                        radius: 35,
+                                        backgroundImage: game.homeTeam!.logo,
+                                      ),
+                                    ),
                                     Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            game.visitorTeam!.abbreviation,
-                                            textAlign: TextAlign.end,
+                                            game.homeTeam!.abbreviation,
+                                            textAlign: TextAlign.start,
                                             style: TextStyle(
-                                              fontSize: 25,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontSize: 25,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            game.visitorTeamScore.toString(),
+                                            game.homeTeamScore.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: getScoreColors(
-                                                "visitor",
+                                                "home",
                                                 game.homeTeamScore ?? 0,
                                                 game.visitorTeamScore ?? 0,
                                               ),
@@ -187,22 +155,56 @@ class _GameState extends State<Game> {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 20),
-                                      child: CircleAvatar(
-                                        radius: 35,
-                                        backgroundImage: game.visitorTeam!.logo,
-                                      ),
-                                    ),
+                                    )
                                   ],
-                                )
-                              ],
-                            ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          game.visitorTeam!.abbreviation,
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          game.visitorTeamScore.toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: getScoreColors(
+                                              "visitor",
+                                              game.homeTeamScore ?? 0,
+                                              game.visitorTeamScore ?? 0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20),
+                                    child: CircleAvatar(
+                                      radius: 35,
+                                      backgroundImage: game.visitorTeam!.logo,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),

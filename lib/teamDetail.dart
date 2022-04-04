@@ -21,20 +21,6 @@ class _TeamDetailState extends State<TeamDetail> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      //   iconTheme: IconThemeData(
-      //     color: Colors.black,
-      //   ),
-      //   title: Text(
-      //     team.name,
-      //     style: TextStyle(
-      //       color: Colors.black,
-      //     ),
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
@@ -68,8 +54,11 @@ class _TeamDetailState extends State<TeamDetail> {
                 padding: const EdgeInsets.all(15),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.chevron_left_rounded,
+                    InkWell(
+                      onTap: () => {Navigator.pop(context)},
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                      ),
                     ),
                     Text(
                       team.name,

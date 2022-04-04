@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:nba/game.dart';
-import 'package:nba/standings.dart';
 import 'package:nba/team.dart';
+import 'package:nba/welcome.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -26,9 +26,11 @@ void main() {
     initialRoute: '/',
     theme: ThemeData(backgroundColor: Color(0xff6C63FF)),
     routes: {
-      '/': (context) => Main(),
+      '/': (context) => Welcome(),
+      '/main': (context) => Main(),
       '/home': (context) => Home(),
-      '/game': (context) => Game(),
+      '/games': (context) => Game(),
+      '/teams': (context) => Team(),
     },
   ));
 }
@@ -42,7 +44,7 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   int currentIndex = 0;
-  final screens = [Home(), Game(), Standings(), Team()];
+  final screens = [Home(), Game(), Team()];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,6 @@ class _MainState extends State<Main> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Game'),
-          BottomNavigationBarItem(icon: Icon(Icons.sort), label: 'Standings'),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Team'),
         ],
       ),
@@ -75,8 +76,9 @@ class Home extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
             child: Image.asset(
               'assets/images/nba.jpg',
               fit: BoxFit.cover,
@@ -96,31 +98,10 @@ class Home extends StatelessWidget {
                       color: Color(0xff726767),
                       fontSize: 20,
                     )),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.5,
-                      child: Card(
-                        elevation: 8.0,
-                        child: Text('data'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.5,
-                      child: Card(
-                        elevation: 8.0,
-                        child: Text('data'),
-                      ),
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.5,
-                      child: Card(
-                        elevation: 8.0,
-                        child: Text('data'),
-                      ),
-                    ),
-                  ],
-                )
+
+                // nih edit nya dibawah line sini aja
+
+                // pembates
               ],
             ),
           )
