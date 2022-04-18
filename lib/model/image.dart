@@ -25,13 +25,25 @@ class ImageModel {
   }
 
   ImageProvider getLogo(String code) {
-    ImageProvider image;
-    try {
-      image = AssetImage("assets/images/$code.png");
-    } catch (e) {
-      print(e.toString());
-      image = AssetImage('assets/images/nba.jpg');
-    }
-    return image;
+    Image image = Image.asset(
+      "assets/images/$code.png",
+      errorBuilder:
+          (BuildContext context, Object exception, StackTrace? stackTrace) {
+        return Image.asset(
+          "assets/images/nba.jpg",
+        );
+      },
+    );
+
+    ImageProvider result = image.image;
+
+    // ImageProvider image;
+    // try {
+    //   image = AssetImage("assets/images/$code.png");
+    // } catch (e) {
+    //   print(e.toString());
+    //   image = AssetImage('assets/images/nba.jpg');
+    // }
+    return result;
   }
 }

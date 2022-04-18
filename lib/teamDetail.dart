@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:nba/model/team.dart';
+import 'package:nba/utils/shared_pref.dart';
 
 class TeamDetail extends StatefulWidget {
   TeamModel team;
@@ -74,7 +75,7 @@ class _TeamDetailState extends State<TeamDetail> {
             Positioned(
               top: size.height * 0.26,
               width: size.width,
-              height: size.height,
+              height: size.height * 0.74,
               child: Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -85,6 +86,7 @@ class _TeamDetailState extends State<TeamDetail> {
                   ),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
@@ -116,7 +118,32 @@ class _TeamDetailState extends State<TeamDetail> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    Container(
+                      width: size.width,
+                      padding: EdgeInsets.all(9),
+                      margin: EdgeInsets.only(bottom: 21),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                        color: Color(0xff6C63FF),
+                      ),
+                      child: InkWell(
+                        onTap: () => {
+                          SharedPref().addBookMarkId(team.id.toString()),
+                        },
+                        child: Text(
+                          'BookMark this team',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -3,13 +3,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPref {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future setString(String key, String value) async {
+  Future addBookMarkId(String value) async {
+    print(value);
     final SharedPreferences prefs = await _prefs;
-    prefs.setString(key, value);
+
+    List bookMarkIds = await this.getBookMarkList();
+
+    if (bookMarkIds.length > 0) {
+      List hasId =
+          bookMarkIds.where((element) => element.toString() == value).toList();
+      if (hasId.length <= 0) {
+        prefs.setStringList("bookmark_id", <String>[...bookMarkIds, value]);
+      }
+    } else {
+      prefs.setStringList("bookmark_id", <String>[value]);
+    }
   }
 
-  Future<String?> getString(String key) async {
+  Future<List<String>> getBookMarkList() async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getString(key);
+    return prefs.getStringList("bookmark_id") ?? [];
   }
 }

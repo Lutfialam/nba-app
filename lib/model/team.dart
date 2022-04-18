@@ -40,8 +40,18 @@ class TeamModel {
 
     var teams = json.decode(response.body);
     List<dynamic> team = (teams as Map<String, dynamic>)['data'];
-    ImageProvider log = AssetImage('assets/images/nba.jpg');
 
     return team.map((data) => TeamModel.fromJson(data)).toList();
+  }
+
+  static Future<TeamModel> getTeamById(int id) async {
+    var response = await http
+        .get(Uri.parse(Config().apiUrl + 'teams/' + id.toString()), headers: {
+      "X-RapidAPI-Host": Config().apiHost,
+      "X-RapidAPI-Key": Config().apiKey,
+    });
+    var teams = json.decode(response.body);
+
+    return TeamModel.fromJson(teams);
   }
 }

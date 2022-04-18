@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:nba/bookmark.dart';
 import 'package:nba/game.dart';
 import 'package:nba/team.dart';
 import 'package:nba/welcome.dart';
@@ -24,13 +25,17 @@ void main() {
     debugShowCheckedModeBanner: false,
     title: 'Routing Navigation',
     initialRoute: '/',
-    theme: ThemeData(backgroundColor: Color(0xff6C63FF)),
+    theme: ThemeData(
+      backgroundColor: Color(0xff6C63FF),
+      fontFamily: 'Poppins',
+    ),
     routes: {
       '/': (context) => Welcome(),
       '/main': (context) => Main(),
       '/home': (context) => Home(),
       '/games': (context) => Game(),
       '/teams': (context) => Team(),
+      '/bookmark': (context) => BookMark(),
     },
   ));
 }
@@ -44,7 +49,14 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   int currentIndex = 0;
-  final screens = [Home(), Game(), Team()];
+  final screens = [Home(), Game(), BookMark(), Team()];
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +70,8 @@ class _MainState extends State<Main> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Game'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.bookmark), label: 'bookmark'),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Team'),
         ],
       ),
