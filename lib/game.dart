@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:nba/model/image.dart';
+import 'package:nba/gameDetail.dart';
 import 'package:nba/model/game.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -13,10 +11,7 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  String error = '';
   String dateGame = '';
-  bool loading = true;
-  List<GameModel> games = [];
 
   Color getScoreColors(String position, int homeScore, int visitorScore) {
     if (homeScore > visitorScore) {
@@ -28,41 +23,16 @@ class _GameState extends State<Game> {
     }
   }
 
-  void getGame() {
-    setState(() => loading = true);
-
-    if (dateGame.length > 0) {
-      GameModel.getGameByDate(dateGame.toString())
-          .then((value) => setState(() {
-                setState(() => games = value);
-                print('object');
-              }))
-          .onError((error, stackTrace) {
-        setState(() => error = error.toString());
-        print('object err' + error.toString());
-      });
-      setState(() => loading = false);
-    } else {
-      GameModel.getAllGame().then((value) {
-        setState(() => games = value);
-        print('object 2');
-      }).onError((error, stackTrace) {
-        setState(() => error = error.toString());
-        print('object 2 err' + error.toString());
-      });
-      setState(() => loading = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    getGame();
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
-      child: loading
-          ? Center(child: Text('Loading...'))
-          : SingleChildScrollView(
+      child: FutureBuilder<List<GameModel>>(
+        future: GameModel.getAllGame(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
@@ -82,8 +52,7 @@ class _GameState extends State<Game> {
                             showTitleActions: true,
                             minTime: DateTime(2018, 3, 5),
                             maxTime: DateTime(2019, 6, 7), onConfirm: (date) {
-                          setState(() => dateGame = date.toString());
-                          getGame();
+                          setState(() => {dateGame = date.toString()});
                         }, currentTime: DateTime.now(), locale: LocaleType.id)
                       },
                       child: Row(
@@ -106,48 +75,93 @@ class _GameState extends State<Game> {
                   Container(
                     margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
                     child: Column(
-                      children: games.map((game) {
-                        return Container(
-                          margin: EdgeInsets.only(top: 5, bottom: 5),
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: Color(0xff6C63FF),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(right: 20),
-                                      child: CircleAvatar(
-                                        radius: 35,
-                                        backgroundImage: game.homeTeam!.logo,
+                      children: snapshot.data!.map((game) {
+                        return InkWell(
+                          onTap: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    GameDetail(game: game),
+                              ),
+                            ),
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(top: 5, bottom: 5),
+                            padding: EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Color(0xff6C63FF),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: CircleAvatar(
+                                          radius: 35,
+                                          backgroundImage: game.homeTeam!.logo,
+                                        ),
                                       ),
-                                    ),
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              game.homeTeam!.abbreviation,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              game.homeTeamScore.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: getScoreColors(
+                                                  "home",
+                                                  game.homeTeamScore ?? 0,
+                                                  game.visitorTeamScore ?? 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
                                     Container(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            game.homeTeam!.abbreviation,
-                                            textAlign: TextAlign.start,
+                                            game.visitorTeam!.abbreviation,
+                                            textAlign: TextAlign.end,
                                             style: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 25,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           Text(
-                                            game.homeTeamScore.toString(),
+                                            game.visitorTeamScore.toString(),
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: getScoreColors(
-                                                "home",
+                                                "visitor",
                                                 game.homeTeamScore ?? 0,
                                                 game.visitorTeamScore ?? 0,
                                               ),
@@ -155,52 +169,18 @@ class _GameState extends State<Game> {
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 20),
+                                      child: CircleAvatar(
+                                        radius: 35,
+                                        backgroundImage: game.visitorTeam!.logo,
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          game.visitorTeam!.abbreviation,
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          game.visitorTeamScore.toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: getScoreColors(
-                                              "visitor",
-                                              game.homeTeamScore ?? 0,
-                                              game.visitorTeamScore ?? 0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 20),
-                                    child: CircleAvatar(
-                                      radius: 35,
-                                      backgroundImage: game.visitorTeam!.logo,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         );
                       }).toList(),
@@ -208,7 +188,16 @@ class _GameState extends State<Game> {
                   ),
                 ],
               ),
-            ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6C63FF)),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

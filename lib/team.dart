@@ -78,9 +78,14 @@ class _TeamState extends State<Team> {
               );
             } else {
               return Container(
-                height: size.height,
                 width: size.width,
-                child: Text('Loading ...'),
+                height: size.height,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Color(0xff6C63FF)),
+                  ),
+                ),
               );
             }
           },

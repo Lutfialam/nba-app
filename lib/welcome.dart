@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:nba/main.dart';
+import 'package:nba/utils/shared_pref.dart';
 
 class Welcome extends StatelessWidget {
+  isFirstTime(context) async {
+    bool isNotFirstTime = await SharedPref().isNotFirstTime();
+
+    if (isNotFirstTime) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => Main(),
+        ),
+      );
+    }
+  }
+
+  void setIsNotFirstTime() async {
+    await SharedPref().setIsNotFirstTime();
+  }
+
   @override
   Widget build(BuildContext context) {
+    isFirstTime(context);
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -58,7 +77,7 @@ class Welcome extends StatelessWidget {
                         Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Welcome to NBA APP! Click next if you want to see nba games or team!',
+                            'Welcome to NBA APP! Click start if you want to see nba games or team!',
                             style: TextStyle(
                               fontSize: 21,
                               color: Colors.white,
@@ -75,13 +94,16 @@ class Welcome extends StatelessWidget {
                           ),
                         )
                       },
-                      child: Container(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          'Next >',
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
+                      child: InkWell(
+                        onTap: () => setIsNotFirstTime(),
+                        child: Container(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            'Start >',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),

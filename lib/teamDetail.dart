@@ -14,10 +14,17 @@ class TeamDetail extends StatefulWidget {
 
 class _TeamDetailState extends State<TeamDetail> {
   TeamModel team;
+  bool bookMarkHasId = false;
   _TeamDetailState(this.team);
 
   @override
   Widget build(BuildContext context) {
+    SharedPref().bookMarkHasId(team.id.toString()).then((value) {
+      setState(() {
+        bookMarkHasId = value;
+      });
+    });
+
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -88,35 +95,49 @@ class _TeamDetailState extends State<TeamDetail> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    Column(
                       children: [
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundImage: team.logo,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                team.name,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundImage: team.logo,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    team.name,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    team.abbreviation,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Text(
-                                team.abbreviation,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                        Text(
+                          "Name: ${team.name} \n" +
+                              "Nickname: ${team.nickname} \n" +
+                              "code: ${team.abbreviation} \n" +
+                              "city: ${team.city} \n",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff747474),
+                          ),
+                        )
                       ],
                     ),
                     Container(
@@ -128,14 +149,25 @@ class _TeamDetailState extends State<TeamDetail> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
                         ),
-                        color: Color(0xff6C63FF),
+                        color: bookMarkHasId
+                            ? Color(0xffF50057)
+                            : Color(0xff6C63FF),
                       ),
                       child: InkWell(
                         onTap: () => {
-                          SharedPref().addBookMarkId(team.id.toString()),
+                          if (bookMarkHasId)
+                            {
+                              SharedPref()
+                                  .removeIdFromBookmark(team.id.toString())
+                                  .then((value) => Navigator.pop(context))
+                            }
+                          else
+                            {SharedPref().addBookMarkId(team.id.toString())}
                         },
                         child: Text(
-                          'BookMark this team',
+                          bookMarkHasId
+                              ? 'Remove this team'
+                              : 'Bookmark this team',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,

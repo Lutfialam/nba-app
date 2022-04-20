@@ -4,8 +4,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:nba/bookmark.dart';
 import 'package:nba/game.dart';
+import 'package:nba/home.dart';
 import 'package:nba/team.dart';
 import 'package:nba/welcome.dart';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -17,9 +20,10 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = new MyHttpOverrides();
+  await dotenv.load(fileName: ".env");
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -52,13 +56,6 @@ class _MainState extends State<Main> {
   final screens = [Home(), Game(), BookMark(), Team()];
 
   @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentIndex],
@@ -73,52 +70,6 @@ class _MainState extends State<Main> {
           BottomNavigationBarItem(
               icon: Icon(Icons.bookmark), label: 'bookmark'),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Team'),
-        ],
-      ),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            child: Image.asset(
-              'assets/images/nba.jpg',
-              fit: BoxFit.cover,
-              height: 200,
-              width: screenWidth,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Available leagues',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: Color(0xff726767),
-                      fontSize: 20,
-                    )),
-
-                // nih edit nya dibawah line sini aja
-
-                // pembates
-              ],
-            ),
-          )
         ],
       ),
     );

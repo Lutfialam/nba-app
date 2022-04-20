@@ -24,4 +24,33 @@ class SharedPref {
     final SharedPreferences prefs = await _prefs;
     return prefs.getStringList("bookmark_id") ?? [];
   }
+
+  Future removeIdFromBookmark(String id) async {
+    final SharedPreferences prefs = await _prefs;
+    List bookMarkIds = await this.getBookMarkList();
+
+    List<String> newBookMarkIds =
+        bookMarkIds.where((element) => element != id).toList().cast();
+
+    prefs.setStringList("bookmark_id", newBookMarkIds);
+  }
+
+  Future<bool> bookMarkHasId(String id) async {
+    List bookMarkIds = await this.getBookMarkList();
+
+    List<String> newBookMarkIds =
+        bookMarkIds.where((element) => element == id).toList().cast();
+
+    return newBookMarkIds.length > 0;
+  }
+
+  Future<bool> isNotFirstTime() async {
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getBool("is_first_time") ?? true;
+  }
+
+  Future setIsNotFirstTime() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool("is_first_time", false);
+  }
 }

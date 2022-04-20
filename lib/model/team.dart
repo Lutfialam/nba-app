@@ -6,7 +6,7 @@ import 'package:nba/model/image.dart';
 
 class TeamModel {
   int? id;
-  String name, nickname, abbreviation, city;
+  String name, nickname, abbreviation, city, division, conference;
   ImageProvider? logo;
 
   TeamModel({
@@ -15,6 +15,8 @@ class TeamModel {
     this.nickname = '',
     this.abbreviation = '',
     this.city = '',
+    this.division = '',
+    this.conference = '',
     this.logo,
   });
 
@@ -27,6 +29,8 @@ class TeamModel {
       nickname: json["name"],
       abbreviation: json["abbreviation"],
       city: json["city"],
+      division: json["division"],
+      conference: json["conference"],
       logo: image.getLogo(json['abbreviation']),
     );
   }
