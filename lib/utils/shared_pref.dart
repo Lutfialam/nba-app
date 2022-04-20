@@ -46,11 +46,11 @@ class SharedPref {
 
   Future<bool> isNotFirstTime() async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getBool("is_first_time") ?? true;
+    return prefs.getBool("is_not_first_time") ?? false;
   }
 
   Future setIsNotFirstTime() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.setBool("is_first_time", false);
+    prefs.setBool("is_not_first_time", true);
   }
 }

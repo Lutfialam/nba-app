@@ -15,8 +15,13 @@ class Welcome extends StatelessWidget {
     }
   }
 
-  void setIsNotFirstTime() async {
+  void setIsNotFirstTime(context) async {
     await SharedPref().setIsNotFirstTime();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (BuildContext context) => Main(),
+      ),
+    );
   }
 
   @override
@@ -95,7 +100,7 @@ class Welcome extends StatelessWidget {
                         )
                       },
                       child: InkWell(
-                        onTap: () => setIsNotFirstTime(),
+                        onTap: () => setIsNotFirstTime(context),
                         child: Container(
                           alignment: Alignment.bottomRight,
                           child: Text(
